@@ -30,9 +30,6 @@ while True:
     bucket_path = os.getenv("BUCKET_FILE_PATH")  # Destination path in the bucket
     project = os.getenv("PROJECT_NAME")  # Google Cloud project ID
 
-    # Display the bucket name for logging purposes
-    print("BUCKET: " + bucket_name)
-
     # Initialize the Google Cloud Storage client
     # Assumes authentication is set up via GOOGLE_APPLICATION_CREDENTIALS environment variable
     # or default credentials (gcloud auth application-default login)

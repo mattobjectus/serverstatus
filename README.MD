@@ -76,7 +76,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/service-account-key.json"
 Run the storage uploader to continuously upload status files:
 
 ```bash
-python store_demo_server_status.py
+python store_demo_server_status_file.py
 ```
 
 This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bucket every 5 seconds.
@@ -114,7 +114,7 @@ The server will run on `http://0.0.0.0:5555`
 
 ## File Structure
 
-- `store_demo_server_status.py` - GCS upload script
+- `store_demo_server_status_file.py` - GCS upload script
 - `process_server_status.py` - Main dashboard update and event management script
 - `test/demo/serviceChk_finprodcoredc2.txt` - Service status input file
 - `.env` - Environment configuration (not tracked in git)
