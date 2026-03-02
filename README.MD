@@ -157,4 +157,6 @@ For issues or questions, please contact the development team.
 
 ## Finacle Observability Component Flow Diagram
 
+_This project provides the python script referenced in the lower right hand green box in this diagram._
+
 ![Flow Diagram Not Found](./docs/images/finacleflowdiag.png)
