@@ -16,6 +16,7 @@ from google.cloud import storage
 import os
 from flask import Flask, jsonify, request
 import time
+from datetime import datetime
 
 
 def find_instana_dashboard_id(dashboard_name, base_url, api_token):
@@ -325,7 +326,8 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
         header = ["Service Name","Status","PPID","Limo Port"]
         markdown_table += "|&nbsp;" + "&nbsp;|&nbsp;".join(header) + "&nbsp;|\n"
         markdown_table += "| " + " |".join(['---'] * len(header)) + " |\n"
-        
+        markdown_table += "|&nbsp; | | | |\n"
+
         # Get currently open events from Instana to manage event lifecycle
         openIssues = find_open_events()
         onlineEvents = openIssues["online"]
@@ -348,6 +350,7 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
             
 
         # First pass: Add all offline/down services to the table (in bold)
+        addedDowns = False
         for line in lines[lineIndex:]:
             if (not csv_file and line.endswith(findBreak)):
                 break
@@ -357,7 +360,11 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
                 else:
                     columns = splitThis(line)
                 if (columns[1].capitalize() == 'Down' or columns[1] == 'Offline'):
+                    addedDowns = True
                     markdown_table += "|&nbsp;**" + "**&nbsp;|&nbsp;**".join(columns) + "**&nbsp;|\n"
+
+        if (addedDowns):
+            markdown_table += "|&nbsp; | | | |\n"
 
         # Second pass: Process each service for event management and add online services to table
         for line in lines[lineIndex:]:
@@ -380,7 +387,10 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
                     markdown_table += "|&nbsp;" + "&nbsp;|&nbsp;".join(columns) + "&nbsp;|\n"
                     close_events(eventsToClose)
                     sendAlertEventWhenServiceIsUp(finacle_host+"."+columns[0],columns[1],columns[2],columns[3])
-                    
+        
+        now = datetime.now()
+        formatted_time = now.strftime("%d-%m-%Y %H:%M:%S")
+        markdown_table += "\n\n##### Updated: "+formatted_time
         return markdown_table
     return None
 
