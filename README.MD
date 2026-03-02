@@ -76,7 +76,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/service-account-key.json"
 Run the storage uploader to continuously upload status files:
 
 ```bash
-python storebucket.py
+python store_demo_server_status.py
 ```
 
 This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bucket every 5 seconds.
@@ -86,12 +86,12 @@ This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bu
 Run the dashboard updater to process status data and update Instana:
 
 ```bash
-python updatedashboardfrombucket.py
+python process_server_status.py
 ```
 
 This script will:
 
-- Read the CSV file from GCS
+- Read the Text file from GCS
 - Parse service status information
 - Update the Instana dashboard with a formatted markdown table
 - Create events for services that are down
@@ -107,20 +107,17 @@ When running as a Flask application, the following endpoints are available:
 Start the Flask server:
 
 ```bash
-python updatedashboardfrombucket.py
+python process_server_status.py
 ```
 
 The server will run on `http://0.0.0.0:5555`
 
 ## File Structure
 
-- `storebucket.py` - GCS upload script
-- `updatedashboardfrombucket.py` - Main dashboard update and event management script
-- `serviceChk_finprodcoredc2.txt` - Service status input file
-- `server_status_source.csv` - CSV format service status data
+- `store_demo_server_status.py` - GCS upload script
+- `process_server_status.py` - Main dashboard update and event management script
+- `test/demo/serviceChk_finprodcoredc2.txt` - Service status input file
 - `.env` - Environment configuration (not tracked in git)
-- `jndbcredentials.json` - Database credentials
-- `msm-dev-keys.json` / `msm-secondary-*.json` - GCP service account keys
 
 ## Service Status Format
 
