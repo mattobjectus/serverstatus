@@ -1,0 +1,48 @@
+-----------------------------------------------------------------------------------------------|
+                 finprodcoredc2          Start     25-02-2026 12:35:19
+-----------------------------------------------------------------------------------------------|
+ServiceName                              Status          PPID                       Limo Port
+-----------------------------------------------------------------------------------------------|
+ConfigService                            UP               38404732                   10082
+cbc                                      UP               44696062                   10141
+aabsrv_JM                                UP               16908924                   10900
+binagent_JM                              UP               57344356                   10551
+chqdpvn_JM                               UP             20521
+coresession                              UP               1376786                    10191
+cust_AchReturns                          UP               14615066                   34384
+cust_AchTransactionProcessing            UP               56623438                   35111
+cust_DeliquentLoansDataProcessing        DOWN             39685
+cust_LoanProcessing                      DOWN             35121
+cust_OutwardWireTransfers                DOWN             38374
+cust_StandingOrderAutomation             DOWN             39025
+cust_alerts_monitor_system_accts         UP               12124530                   46446
+cust_batchTransaction                    UP               53346718                   57574
+cust_billpay_trxn                        DOWN             50100
+cust_billpay_reports                     UP               50856556                   60200
+billpay_Settle                           UP               8127034                    17171
+cust_bpay_charges_collection             UP               52101734                   62779
+cust_bpay_notification                   DOWN             34865826                   72779
+cust_corporateAch                        UP               43909880                   20999
+cust_retailACHBatch                      UP               65929704                   37371
+cust_retailAch                           UP               197372                     47474
+cust_rtgsInward                          DOWN             27272
+cust_rtgsManagament                      DOWN             28285
+cust_rtgsOutward                         DOWN             28282
+dispatcher1_JM                           UP               50200916                   10561
+eabgst_JM                                UP               32637578                   10541
+finlistval                               UP               59966092                   10196
+finlistval_fi                            UP               13763214                   20196
+genlimo_AB                               UP               53084622                   10421
+genlimo_DC                               UP               44040688                   10321
+genlimo_JM                               UP               36962796                   10521
+mqmswiftin_JM                            DOWN             10526
+mqmswiftout_JM                           DOWN             10531
+swiftsrv_JM                              DOWN             10546
+uniser_AB                                UP               48300602                   10391
+uniser_DC                                UP               26804924                   10291
+uniser_JM                                UP               42795522                   10491
+finrptsrvr                               UP               10181
+finrptsrvr                               UP               10184
+-------------------------------------------------------------------------------------------------|
+                                           End      25-02-2026 12:36:07
+-------------------------------------------------------------------------------------------------|
