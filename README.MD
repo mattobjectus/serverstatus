@@ -154,3 +154,7 @@ This project is for internal use and demonstration purposes.
 ## Support
 
 For issues or questions, please contact the development team.
+
+## Finacle Observability Component Flow Diagram
+
+![Flow Diagram Not Found](./docs/images/finacleflowdiag.png)
