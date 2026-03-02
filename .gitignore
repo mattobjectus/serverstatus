@@ -1,4 +1,5 @@
 .env
+certs/
 jndbcredentials.json
 msm-dev-keys.json
 msm-secondary-55cf023b4939.json

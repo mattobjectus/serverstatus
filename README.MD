@@ -55,13 +55,13 @@ PROJECT_NAME=your-gcp-project-id
 BASE_URL=https://your-instance.instana.io
 API_TOKEN=your-instana-api-token
 DASHBOARD_NAME=Finacle Monitor
-WIDGET_NAME=Service Status
+WIDGET_NAME=finprodcoredc2 Service Status
 AGENT_URL=http://your-agent-url:4001
 EVENT_DURATION=3600000
 FINACLE_HOST=finprodcoredc2
 ```
 
-### Google Cloud Authentication
+### Google Cloud Authentication!
 
 Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to point to your service account key file:
 
