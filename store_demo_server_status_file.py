@@ -44,10 +44,10 @@ while True:
 
     # Upload the local file to the bucket
     # The file 'serviceChk_finprodcoredc2.txt' must exist in the current working directory
-    blob.upload_from_filename('test/demo/serviceChk_finprodcoredc2.txt')
+    blob.upload_from_filename('test/demo/serviceChk_finprodcoredc.txt')
     
     # Log successful upload with the destination path
     print("File uploaded successfully: " + bucket_path)
     
     # Wait 5 seconds before the next upload iteration
-    time.sleep(5)
+    time.sleep(10)

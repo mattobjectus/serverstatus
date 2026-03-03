@@ -61,6 +61,13 @@ EVENT_DURATION=3600000
 FINACLE_HOST=finprodcoredc2
 ```
 
+# Control parameters
+
+```bash
+AS_ENDPOINT=False - Allows it to act as a REST endpoint
+LOOP=False - Allows it to loop indefinitely for demos
+```
+
 ### Google Cloud Authentication!
 
 Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to point to your service account key file:

@@ -17,7 +17,9 @@ import os
 from flask import Flask, jsonify, request
 import time
 from datetime import datetime
-
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
 
 def find_instana_dashboard_id(dashboard_name, base_url, api_token):
     """
@@ -143,15 +145,15 @@ def find_open_events():
         if (issue["state"] == "open"):
                 serviceName = None
                 # Check if this is an offline event
-                if (issue["problem"].endswith(negativeSuffix)):
-                    serviceName = issue["problem"].removesuffix(negativeSuffix).strip()
+                if (issue["problem"].endswith(offlineSuffix)):
+                    serviceName = issue["problem"].removesuffix(offlineSuffix).strip()
                     eventList = openOfflineEvents.get(serviceName,[])
                     eventList.append(issue["eventId"])
                     openOfflineEvents[serviceName] = eventList
 
                 # Check if this is an online event
-                if (issue["problem"].endswith(positiveSuffix)):
-                    serviceName = issue["problem"].removesuffix(positiveSuffix).strip()                
+                if (issue["problem"].endswith(onlineSuffix)):
+                    serviceName = issue["problem"].removesuffix(onlineSuffix).strip()                
                     eventList = openOnlineEvents.get(serviceName,[])
                     eventList.append(issue["eventId"])
                     openOnlineEvents[serviceName] = eventList
@@ -244,7 +246,7 @@ def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid):
     
     # Create event with severity 10 (critical) for service down
     event_data = {
-        "title": service_name + " "+negativeSuffix,
+        "title": service_name + " "+offlineSuffix,
         "text": "The service "+service_name+" has been detected as down. PPID "+ppid+", LimoId: "+limoid,
         "severity": 10, 
         "duration": duration     
@@ -254,6 +256,7 @@ def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid):
     response = requests.post(post_url, headers=headers, json=event_data)
     if response.status_code != 204:
         raise Exception(f"Failed to send event for {service_name}")
+    print(f"Alert Sent: {response.status_code}")
 
 def sendAlertEventWhenServiceIsUp(service_name,status,ppid,limoid):
     """
@@ -271,7 +274,7 @@ def sendAlertEventWhenServiceIsUp(service_name,status,ppid,limoid):
     
     # Create event with severity -1 (resolution) for service up
     event_data = {
-        "title": service_name + " "+positiveSuffix,
+        "title": service_name + " "+onlineSuffix,
         "text": "The service "+service_name+" has been detected as up. PPID "+ppid+", LimoId: "+limoid,
         "severity": -1, 
         "duration":duration
@@ -292,7 +295,7 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
     """
     Main processing function that:
     1. Reads CSV file from Google Cloud Storage bucket
-    2. Parses the CSV and builds a markdown table
+    2. Parses the CSV or text file and builds a markdown table
     3. Retrieves open events from Instana
     4. Sends new events for services that are down
     5. Closes events for services that are back up
@@ -394,37 +397,11 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
         return markdown_table
     return None
 
-
 # =============================================================================
-# CONFIGURATION SECTION
-# =============================================================================
-# TODO: ADD ERROR HANDLING
-# TODO: HAVE IT RUN AS A SCHEDULED TASK ON CLOUD RUN
-# TODO: EXPOSE AN ENDPOINT TO MANUALLY DO IT
-# TODO: ADD CODE TO DETECT STATE CHANGE SO WE CAN TOGGLE THE ALERT AND CHANGE SEVERITY
-# TODO: ADD LOGGING
-
-# Event title suffixes to identify service status
-negativeSuffix = "is Offline"  # Suffix for services that are down
-positiveSuffix = "is Online"   # Suffix for services that are up
-
-# Load configuration from environment variables with defaults
-base_url = os.getenv('BASE_URL','https://yellow-fire04qg8u.instana.io')  # Instana instance URL
-api_token = os.getenv('API_TOKEN','API TOKEN REQUIRED')  # Instana API token
-dashboard_name = os.getenv('DASHBOARD_NAME','Finacle Monitor')  # Dashboard name to update
-widget_name = os.getenv('WIDGET_NAME','Service Status')  # Widget name within dashboard
-bucket_name = os.getenv('BUCKET_NAME','antarsia_test')  # GCS bucket name
-bucket_file_path= os.getenv('BUCKET_FILE_PATH','server_status.csv')  # CSV file path in bucket
-agent_url  = os.getenv('AGENT_URL','http://172.16.0.70:4001')  # Instana agent URL for events
-duration = int(os.getenv('EVENT_DURATION','3600000'))  # Event duration in milliseconds (default: 1 hour)
-project= os.getenv("PROJECT_NAME")
-finacle_host = os.getenv("FINACLE_HOST")
-
-# =============================================================================
-# MAIN EXECUTION FUNCTION
+# Primary Processing
 # =============================================================================
 
-def mainEntryPoint():
+def primaryProcessing():
         # Step 1: Process the CSV from bucket, create markdown table, and send events
     newConfig = processBucketCreateMarkupAndSendEvents(bucket_name,bucket_file_path)
 
@@ -458,17 +435,50 @@ def hello_world():
 
 @app.route('/api/v1/service/status', methods=['GET'])
 def executeServiceStatus():
-    dd = mainEntryPoint()
+    dd = primaryProcessing()
     return dd
 
 
-loop=True
-while loop:
-    dd = mainEntryPoint()
-    print(dd)
-    break
-    time.sleep(5)    
-    
-if (not loop):
+# =============================================================================
+# CONFIGURATION SECTION
+# =============================================================================
+# TODO: ADD ERROR HANDLING
+# TODO: HAVE IT RUN AS A SCHEDULED TASK ON CLOUD RUN
+# TODO: EXPOSE AN ENDPOINT TO MANUALLY DO IT
+# TODO: ADD CODE TO DETECT STATE CHANGE SO WE CAN TOGGLE THE ALERT AND CHANGE SEVERITY
+# TODO: ADD LOGGING
+
+# Event title suffixes to identify service status
+offlineSuffix = "is Offline"  # Suffix for services that are down
+onlineSuffix = "is Online"   # Suffix for services that are up
+
+# Load configuration from environment variables with defaults
+base_url = os.getenv('BASE_URL','https://yellow-fire04qg8u.instana.io')  # Instana instance URL
+api_token = os.getenv('API_TOKEN','API TOKEN REQUIRED')  # Instana API token
+dashboard_name = os.getenv('DASHBOARD_NAME','Finacle Monitor')  # Dashboard name to update
+widget_name = os.getenv('WIDGET_NAME','Service Status')  # Widget name within dashboard
+bucket_name = os.getenv('BUCKET_NAME','antarsia_test')  # GCS bucket name
+bucket_file_path= os.getenv('BUCKET_FILE_PATH','server_status.csv')  # CSV file path in bucket
+agent_url  = os.getenv('AGENT_URL','http://172.16.0.70:4001')  # Instana agent URL for events
+duration = int(os.getenv('EVENT_DURATION','3600000'))  # Event duration in milliseconds (default: 1 hour)
+project= os.getenv("PROJECT_NAME")
+finacle_host = os.getenv("FINACLE_HOST")
+
+
+# =============================================================================
+# MAIN EXECUTION FUNCTION
+# =============================================================================
+loop=os.getenv("LOOP",False)
+as_endpoint=os.getenv("AS_ENDPOINT",False)
+if loop and not as_endpoint:
+    while True:
+        dd = primaryProcessing()
+        print(dd)
+        time.sleep(5)
+elif not as_endpoint and not loop:
+    dd = primaryProcessing()
+    print(dd)    
+elif (not as_endpoint):
+    print("****** RUNNNING AS AN ENDPOINT ******")
     if __name__ == '__main__':
         app.run(debug=True, host='0.0.0.0', port=5555)
