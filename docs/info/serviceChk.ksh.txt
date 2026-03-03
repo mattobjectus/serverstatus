@@ -1,0 +1,109 @@
+#############################################################
+# Script name   : serviceChk.ksh                                #
+# Description   : This script will give the o/p of different#
+#                                       services status with PPID/Port  #
+# Author        : Ranjith Palani                            #
+#############################################################
+
+#!/bin/ksh
+cfgpath="/finaclebe/BE"
+cbcPath="/finaclebe/BE/CBC/services"
+tba_prod_srvc="/finaclebe/BE/Finacle/FC/app/services"
+finrpt1="/finaclebe/BE/finlstclnt/FINRPT/services"
+finrpt2="/finaclebe/BE/comnclnt/FINRPT/services"
+
+if [ -f /tmp/srvcPrt.lst ]; then
+        rm /tmp/srvcPrt.lst
+fi
+
+echo "${cfgpath}/ConfigService/bin|10082"                               > /tmp/srvcPrt.lst
+echo "${cbcPath}/cbc/bin|10141"                                         >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/aabsrv_JM/bin|10900"                             >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/binagent_JM/bin|10551"                           >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/chqdpvn_JM/bin|20521"                            >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/coresession/bin|10191"                           >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_AchReturns/bin|34384"                       >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_AchTransactionProcessing/bin|35111"         >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_DeliquentLoansDataProcessing/bin|39685"     >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_LoanProcessing/bin|35121"                   >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_OutwardWireTransfers/bin|38374"             >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_StandingOrderAutomation/bin|39025"          >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_alerts_monitor_system_accts/bin|46446"      >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_batchTransaction/bin|57574"                 >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_billpay_trxn/bin|50100"                     >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_billpay_reports/bin|60200"                  >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/billpay_Settle/bin|17171"                        >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_bpay_charges_collection/bin|62779"          >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_bpay_notification/bin|72779"                >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_corporateAch/bin|20999"                     >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_retailACHBatch/bin|37374"                   >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_retailAch/bin|47474"                        >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_rtgsInward/bin|27272"                       >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_rtgsManagament/bin|28285"                   >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/cust_rtgsOutward/bin|28282"                      >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/dispatcher1_JM/bin|10561"                        >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/eabgst_JM/bin|10541"                             >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/finlistval/bin|10196"                            >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/finlistval_fi/bin|20196"                         >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/genlimo_AB/bin|10421"                            >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/genlimo_DC/bin|10321"                            >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/genlimo_JM/bin|10521"                            >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/mqmswiftin_JM/bin|10526"                         >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/mqmswiftout_JM/bin|10531"                        >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/swiftsrv_JM/bin|10546"                           >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/uniser_AB/bin|10391"                             >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/uniser_DC/bin|10291"                             >> /tmp/srvcPrt.lst
+echo "${tba_prod_srvc}/uniser_JM/bin|10491"                             >> /tmp/srvcPrt.lst
+echo "${finrpt1}/finrptsrvr/bin|10181"                                  >> /tmp/srvcPrt.lst
+echo "${finrpt2}/finrptsrvr/bin|10184"                                  >> /tmp/srvcPrt.lst
+#echo "LogMonitor"
+#echo "aml_screening"
+
+green="\033[32m"
+red="\033[31m"
+yellow="\033[33m"
+cyan="\033[36m"
+blue="\033[34m"
+cbold="\033[1m"
+cEnd="\033[00m"
+
+
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+RESET='\033[0m'
+
+color_text() {
+  color=$1
+  text=$2
+  printf "%b%s%b" "$color" "$text" "$RESET"
+}
+
+                echo "-----------------------------------------------------------------------------------------------|"
+                echo "           ${cyan}      `hostname`          Start     `date +\"%d-%m-%Y %H:%M:%S\"`                                   ${cEnd} "
+                echo "-----------------------------------------------------------------------------------------------|"
+                printf "%-40s %-15s %-25s  %-40s\n" "ServiceName" "Status" "PPID" "Limo Port"
+                echo "-----------------------------------------------------------------------------------------------|"
+while read srvc
+do
+        fieldPath=`echo ${srvc}|cut -f1 -d '|'`
+        fieldPort=`echo ${srvc}|cut -f2 -d '|'`
+        chkPort=`netstat -an|grep ${fieldPort}|grep LISTEN|wc -l`
+        limoPid=`cat ${fieldPath}/Limo*.pid 2> /dev/null`
+        srvcName=`echo ${fieldPath}| awk -F'/' '{print $(NF-1)}'`
+        ls -lrt ${fieldPath}/Limo*.pid 2> /dev/null > /dev/null
+        #echo $?
+        if [[ $? -eq 0 ]] && [[ ${chkPort} -ge 1 ]]; then
+                printf "%-49s %-25s %-25s  %-40s\n" "$(color_text "$GREEN" ${srvcName})" "$(color_text "$GREEN" "UP")" ${limoPid} $fieldPort
+                sleep 1
+        else
+                printf "%-49s %-25s %-25s  %-40s\n" "$(color_text "$RED" ${srvcName})" "$(color_text "$RED" "DOWN")" ${limoPid} $fieldPort
+                sleep 1
+        fi
+done < /tmp/srvcPrt.lst
+                echo "-------------------------------------------------------------------------------------------------|"
+                echo "           ${cyan}                                End     `date +\"%d-%m-%Y %H:%M:%S\"`                                   ${cEnd}    "
+                echo "-------------------------------------------------------------------------------------------------|"
+
+

@@ -288,7 +288,11 @@ def sendAlertEventWhenServiceIsUp(service_name,status,ppid,limoid):
 def splitThis(line):
     chunks = list(filter(str.strip,line.split(" "))) 
     if (len(chunks) == 3):
+        # this means no PPID was provided and so we need to use the ppid in the report
+        # as the limo port and blank the pp
         chunks.append('')
+        chunks[3] = chunks[2]
+        chunks[2] = ''
     return chunks
 
 def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
@@ -468,8 +472,10 @@ finacle_host = os.getenv("FINACLE_HOST")
 # =============================================================================
 # MAIN EXECUTION FUNCTION
 # =============================================================================
-loop=os.getenv("LOOP",False)
-as_endpoint=os.getenv("AS_ENDPOINT",False)
+
+as_endpoint=os.getenv("AS_ENDPOINT",'False').lower().startswith('t')
+loopTime = int(os.getenv("LOOP_PAUSE_IN_SECONDS","30"))
+loop=loopTime >= 0
 if loop and not as_endpoint:
     while True:
         dd = primaryProcessing()

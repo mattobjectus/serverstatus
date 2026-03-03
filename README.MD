@@ -65,7 +65,7 @@ FINACLE_HOST=finprodcoredc2
 
 ```bash
 AS_ENDPOINT=False - Allows it to act as a REST endpoint
-LOOP=False - Allows it to loop indefinitely for demos
+LOOP_PAUSE_IN_SECONDS=-1 - Positive means it loops pausing this many seconds, negative means it only executes once
 ```
 
 ### Google Cloud Authentication!
@@ -167,3 +167,7 @@ For issues or questions, please contact the development team.
 _This project provides the python script referenced in the lower right hand green box in this diagram._
 
 ![Flow Diagram Not Found](./docs/images/finacleflowdiag.png)
+
+## Finacle Report Generation Script
+
+[Script](./docs//info/serviceChk.ksh.txt)
