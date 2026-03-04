@@ -130,15 +130,15 @@ def find_open_events():
 
     # Query events with a window size of 2x the event duration to catch recent events
     d2 = duration*2
-#    list_url = f'{base_url}/api/events?windowSize={d2}'
-    list_url = f'{base_url}/api/events'
+    list_url = f'{base_url}/api/events?windowSize={d2}'
     response = requests.get(list_url, headers=headers)
     if response.status_code != 200:
         raise Exception(f"Failed to list dashboards: {response.status_code} - {response.text}")
 
     issues = response.json()
-    openOnlineEvents = {}
+    openOnlineEventIds = {}
     openOfflineEvents = {}
+    openOfflineEventIds = {}
     
     # Categorize open events by service name and status (offline vs online)
     for issue in issues: 
@@ -147,18 +147,49 @@ def find_open_events():
                 # Check if this is an offline event
                 if (issue["problem"].endswith(offlineSuffix)):
                     serviceName = issue["problem"].removesuffix(offlineSuffix).strip()
-                    eventList = openOfflineEvents.get(serviceName,[])
+                    eventList = openOfflineEventIds.get(serviceName,[])
                     eventList.append(issue["eventId"])
+                    openOfflineEventIds[serviceName] = eventList
+                    eventList = openOfflineEvents.get(serviceName,[])
+                    eventList.append(issue)
                     openOfflineEvents[serviceName] = eventList
 
                 # Check if this is an online event
                 if (issue["problem"].endswith(onlineSuffix)):
                     serviceName = issue["problem"].removesuffix(onlineSuffix).strip()                
-                    eventList = openOnlineEvents.get(serviceName,[])
+                    eventList = openOnlineEventIds.get(serviceName,[])
                     eventList.append(issue["eventId"])
-                    openOnlineEvents[serviceName] = eventList
+                    openOnlineEventIds[serviceName] = eventList
+
+                    
         
-    return { "offline": openOfflineEvents, "online": openOnlineEvents}
+    return { "offline": openOfflineEventIds, "online": openOnlineEventIds, "offlineEvents": openOfflineEvents}
+
+def filter_events_about_to_expire(openEvents):
+    """
+    This method returns any open events that are about to expire so they can be replaced by new events
+    :param openEvents:  a dict of service names to an array of associated event objects
+    :return: a dict of service names to an array of event ids for events about to expire
+    """
+    events_about_to_expire = {}
+    now_in_millis = time.time_ns() // 1_000_000
+    for serviceName in openEvents:
+        events = openEvents[serviceName]
+        for event in events:
+            expireIn =  (event["end"]-now_in_millis)/60000 
+            # Format the datetime object into a readable string (e.g., "2023-03-15 13:00:00")
+            startTime = datetime.fromtimestamp(event["start"]/1000).strftime("%Y-%m-%d %H:%M:%S")
+            endTime = datetime.fromtimestamp(event["end"]/1000).strftime("%Y-%m-%d %H:%M:%S")
+            interval = (event["end"]-event["start"])/60000
+            print(f"{serviceName} {startTime}-{endTime} [{interval}] will expire in {expireIn} minutes")
+            expires_soon = (event["end"]-max_scheduled_execution_interval) <= now_in_millis            
+            if (expires_soon):
+                print(f"{serviceName} Expired! {startTime}-{endTime} [{interval}] will expire in {expireIn} minutes")
+                eventList = events_about_to_expire.get(serviceName,[])
+                eventList.append(event)
+                events_about_to_expire[serviceName] = eventList            
+    return events_about_to_expire
+
 
 
 def fetch_instana_dashboard(dashboard_id, base_url, api_token):   
@@ -186,6 +217,7 @@ def fetch_instana_dashboard(dashboard_id, base_url, api_token):
 
     dashboard_data = response.json()
     return dashboard_data;
+    
 
 def replaceConfigInWidget(dashboard_json,widget_title,replacement_config):
     """
@@ -231,7 +263,7 @@ def updateDashboardOnInstana(dashboard_json):
         raise Exception(f"Failed to update dashboard {dashboard_id}: {response.status_code} - {response.text}")        
     return dashboard_json
 
-def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid):
+def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid,replacementEvent):
     """
     Sends a high-severity event to Instana when a service is detected as down
     
@@ -244,13 +276,32 @@ def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid):
         'Content-Type': 'application/json'
     }
     
+    # calc start and stop
+    now_in_millis = time.time_ns() // 1_000_000
+    if (replacementEvent):
+        start = replacementEvent["start"]
+        description = replacementEvent["detail"]
+        startTime = datetime.fromtimestamp(now_in_millis/1000).strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        start = now_in_millis
+        startTime = datetime.fromtimestamp(now_in_millis/1000).strftime("%Y-%m-%d %H:%M:%S")
+        description = f"The service '{service_name}' has been detected as down since {startTime}. PPID {ppid}, Limo Port: {limoid}"
+    
+    end = now_in_millis+duration
+    calduations = end - start
+
+
+    
     # Create event with severity 10 (critical) for service down
     event_data = {
         "title": service_name + " "+offlineSuffix,
-        "text": "The service "+service_name+" has been detected as down. PPID "+ppid+", LimoId: "+limoid,
+        "text": description,
         "severity": 10, 
-        "duration": duration     
+        "timestamp": start,
+        "duration": duration
     }
+
+    print(json.dumps(event_data))
 
     post_url = f'{agent_url}/com.instana.plugin.generic.event' 
     response = requests.post(post_url, headers=headers, json=event_data)
@@ -337,8 +388,10 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
 
         # Get currently open events from Instana to manage event lifecycle
         openIssues = find_open_events()
-        onlineEvents = openIssues["online"]
-        offlineEvents = openIssues["offline"]
+        offlineEventIds = openIssues["offline"]
+        offlineEvents = openIssues["offlineEvents"]
+        eventsToReplace = filter_events_about_to_expire(offlineEvents)
+
         eventsToClose = []
 
         findBreak = '---------------------------------------------------------------------------------|'
@@ -384,16 +437,26 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
                     columns = splitThis(line)
                 serviceName = columns[0]
                 
-                eventsToClose = offlineEvents.get(finacle_host+"."+serviceName,[])                
                 if (columns[1].capitalize() == 'Down' or columns[1] == 'Offline'):
-                    # Service is down: close any stale offline events and send new down event
-                    close_events(eventsToClose)
-                    sendAlertEventWhenServiceIsDown(finacle_host+"."+columns[0],columns[1],columns[2],columns[3])
+                    serviceHasOpenDownEvent = len(offlineEventIds.get(finacle_host+"."+serviceName,[])) > 0
+                    if (serviceHasOpenDownEvent):
+                        eventsToReplaceForService = eventsToReplace.get(finacle_host+"."+serviceName,[])      
+                        eventToReplace = None
+                        if (eventsToReplaceForService and len(eventsToReplaceForService)):                            
+                            eventIdsToClose = []
+                            for event in eventsToReplaceForService:
+                                eventIdsToClose.append(event["eventId"])
+                            close_events(eventIdsToClose)             
+                            eventToReplace = eventsToReplaceForService[0]   
+                            sendAlertEventWhenServiceIsDown(finacle_host+"."+columns[0],columns[1],columns[2],columns[3],eventToReplace)                        
+                    else:
+                        sendAlertEventWhenServiceIsDown(finacle_host+"."+columns[0],columns[1],columns[2],columns[3],None)
                 else:
+                    # Service is up close the offline event if it has one
+                    event_ids_to_close = offlineEventIds.get(finacle_host+"."+serviceName,[])
+                    close_events(event_ids_to_close)
                     # Service is up: add to table and send up event, close offline events
                     markdown_table += "|&nbsp;" + "&nbsp;|&nbsp;".join(columns) + "&nbsp;|\n"
-                    close_events(eventsToClose)
-                    sendAlertEventWhenServiceIsUp(finacle_host+"."+columns[0],columns[1],columns[2],columns[3])
         
         now = datetime.now()
         formatted_time = now.strftime("%d-%m-%Y %H:%M:%S")
@@ -467,6 +530,8 @@ agent_url  = os.getenv('AGENT_URL','http://172.16.0.70:4001')  # Instana agent U
 duration = int(os.getenv('EVENT_DURATION','3600000'))  # Event duration in milliseconds (default: 1 hour)
 project= os.getenv("PROJECT_NAME")
 finacle_host = os.getenv("FINACLE_HOST")
+duration = int(os.getenv('EVENT_DURATION','3600000'))  # Event duration in milliseconds (default: 1 hour)
+max_scheduled_execution_interval=int(os.getenv("MAX_SCHEDULED_INTERVAL_IN_MILLIS",duration))
 
 
 # =============================================================================

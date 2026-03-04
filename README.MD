@@ -57,13 +57,15 @@ API_TOKEN=your-instana-api-token
 DASHBOARD_NAME=Finacle Monitor
 WIDGET_NAME=finprodcoredc2 Service Status
 AGENT_URL=http://your-agent-url:4001
-EVENT_DURATION=3600000
+EVENT_DURATION=3600000 - the amount of time that a event will stay OPEN for
 FINACLE_HOST=finprodcoredc2
+
 ```
 
 # Control parameters
 
 ```bash
+MAX_SCHEDULED_INTERVAL_IN_MILLIS=600000 - the interval at which the scheduler will run (controls event cleanup). It should be greater than actual interval
 AS_ENDPOINT=False - Allows it to act as a REST endpoint
 LOOP_PAUSE_IN_SECONDS=-1 - Positive means it loops pausing this many seconds, negative means it only executes once
 ```
