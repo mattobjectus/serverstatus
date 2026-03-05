@@ -236,3 +236,13 @@ _This project provides the python script referenced in the lower right hand gree
 ## Finacle Report Generation Script
 
 [Script](./docs//info/serviceChk.ksh.txt)
+
+## Instana Configuration
+
+![Instana Alert Table Widget](./docs/images/instanadashboard.png)
+instanadashboard
+
+1.  Create an Instana dashboard that starts with the DASHBOARD_NAME config value.
+2.  Create a Markdown widget with the name found in the WIDGET_NAME config value.
+3.  Create a Table widget with the config shown below. The event.entity.label is the name of the Agent entity sending the alerts
+    ![Instana Alert Table Widget](./docs/images/alerttablewidgetinfo.png)
