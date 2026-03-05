@@ -230,7 +230,8 @@ def replaceConfigInWidget(dashboard_json,widget_title,replacement_config):
     """
     widgets = dashboard_json.get("widgets")
     if (not widgets):
-        return dashboard_json
+       raise Exception(f"Widget not found. Please make a Markdown widget called {widget_title} in the instana dashboard.")
+
     
     # Search for the widget with matching title and update its config
     for widget in widgets:
@@ -239,7 +240,7 @@ def replaceConfigInWidget(dashboard_json,widget_title,replacement_config):
             widget["config"] = replacement_config
             return dashboard_json
         
-    raise Exception(f"Dashboard not found. Please make a Markdown widget called {widget_title} in the instana dashboard.")
+    raise Exception(f"Widget not found. Please make a Markdown widget called {widget_title} in the instana dashboard.")
 
 
 def updateDashboardOnInstana(dashboard_json):
@@ -360,18 +361,24 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
     :param file_path: Path to the CSV file in the bucket
     :return: Markdown table string or None
     """
-    # Initialize the Google Cloud Storage client (assumes authentication is set up)
-    client = storage.Client(project=project)
 
-    # Get the bucket
-    bucket = client.get_bucket(bucket_name)
+    if local_file_override_path:
+        file = open(local_file_override_path)
+        content = file.read()
+        csv_file = local_file_override_path.endswith('.csv')
+    else:
+        # Initialize the Google Cloud Storage client (assumes authentication is set up)
+        client = storage.Client(project=project)
 
-    # Get the blob (file)
-    blob = bucket.blob(file_path)
-    csv_file = file_path.endswith('.csv')
+        # Get the bucket
+        bucket = client.get_bucket(bucket_name)
 
-    # Read the content as text (recommended over download_as_string, which is deprecated)
-    content = blob.download_as_text(encoding='utf-8')
+        # Get the blob (file)
+        blob = bucket.blob(file_path)
+        csv_file = file_path.endswith('.csv')
+
+        # Read the content as text (recommended over download_as_string, which is deprecated)
+        content = blob.download_as_text(encoding='utf-8')
 
     # Parse the content line by line and build a markdown table
     lines = content.strip().split('\n')
@@ -533,7 +540,7 @@ project= os.getenv("PROJECT_NAME")
 finacle_host = os.getenv("FINACLE_HOST")
 duration = int(os.getenv('EVENT_DURATION','3600000'))  # Event duration in milliseconds (default: 1 hour)
 max_scheduled_execution_interval=int(os.getenv("MAX_SCHEDULED_INTERVAL_IN_MILLIS",duration))
-
+local_file_override_path=os.getenv("USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH",None)
 
 # =============================================================================
 # MAIN EXECUTION FUNCTION
