@@ -147,6 +147,69 @@ The system automatically manages Instana events:
 - **Service Up**: Creates a severity -1 (resolution) event with suffix "is Online"
 - **Event Lifecycle**: Automatically closes stale events when service status changes
 
+## Alert Mechanics
+
+The system implements intelligent alert management through Instana events, providing real-time notifications when services go down and automatically resolving alerts when services recover.
+
+### How Alerts Work
+
+**Event Creation:**
+
+- When a service is detected as **Down** or **Offline**, the system creates a critical severity event (severity 10) in Instana
+- Each event is titled with the service name followed by "is Offline" (e.g., "finprodcoredc2.ServiceA is Offline")
+- Events include detailed information: service name, PPID, Limo Port, and timestamp
+- Events have a configurable duration (default: 1 hour / 3600000ms) set via `EVENT_DURATION` environment variable
+
+**Event Resolution:**
+
+- When a service comes back **Up**, the system automatically closes any open "is Offline" events for that service
+- Resolution is performed by calling Instana's manual close API with the reason "Issue resolved. Service back online"
+- The system can also create positive "is Online" events (severity -1) to explicitly mark service recovery
+
+**Event Lifecycle Management:**
+
+- The system queries Instana for all open events within a 2x duration window to track active alerts
+- Events are categorized by service name and status (offline vs online)
+- **Event Replacement:** When an event is about to expire (within `MAX_SCHEDULED_INTERVAL_IN_MILLIS`), the system:
+  1. Identifies events nearing expiration
+  2. Closes the expiring event
+  3. Creates a new event to maintain continuous alerting for services that remain down
+  4. Preserves the original start time and description to maintain alert history
+
+**Alert Deduplication:**
+
+- Before creating a new "is Offline" event, the system checks if an open event already exists for that service
+- If an open event exists and is not expiring soon, no new event is created (prevents duplicate alerts)
+- Only creates replacement events when existing ones are about to expire
+
+**Configuration Parameters:**
+
+- `EVENT_DURATION`: How long an event stays open (in milliseconds)
+- `MAX_SCHEDULED_INTERVAL_IN_MILLIS`: Threshold for determining when to replace expiring events (should be greater than actual execution interval)
+- `AGENT_URL`: Instana agent endpoint for sending events
+- `FINACLE_HOST`: Hostname prefix added to service names in event titles
+
+### Alert Flow Example
+
+1. **Service Goes Down:**
+   - System detects "ServiceA" status = "Down"
+   - Creates event: "finprodcoredc2.ServiceA is Offline" (severity 10)
+   - Event will auto-expire in 1 hour unless replaced
+
+2. **Service Stays Down (Event Refresh):**
+   - After 50 minutes, system detects event will expire soon
+   - Closes the expiring event
+   - Creates new event with same title and original start time
+   - Maintains continuous alerting without gaps
+
+3. **Service Recovers:**
+   - System detects "ServiceA" status = "Up"
+   - Closes the open "is Offline" event
+   - Optionally creates "is Online" event (severity -1)
+   - Alert is resolved in Instana
+
+This intelligent alert mechanism ensures that operations teams are immediately notified of service outages while avoiding alert fatigue from duplicate notifications.
+
 ## TODO
 
 - [ ] Only delete existing alerts if close to expiration

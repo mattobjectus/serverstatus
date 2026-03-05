@@ -239,7 +239,8 @@ def replaceConfigInWidget(dashboard_json,widget_title,replacement_config):
             widget["config"] = replacement_config
             return dashboard_json
         
-    return dashboard_json
+    raise Exception(f"Dashboard not found. Please make a Markdown widget called {widget_title} in the instana dashboard.")
+
 
 def updateDashboardOnInstana(dashboard_json):
     """
@@ -280,7 +281,7 @@ def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid,replacementE
     now_in_millis = time.time_ns() // 1_000_000
     if (replacementEvent):
         start = replacementEvent["start"]
-        description = replacementEvent["detail"]
+        description = replacementEvent["detail"]    
         startTime = datetime.fromtimestamp(now_in_millis/1000).strftime("%Y-%m-%d %H:%M:%S")
     else:
         start = now_in_millis
@@ -542,14 +543,17 @@ as_endpoint=os.getenv("AS_ENDPOINT",'False').lower().startswith('t')
 loopTime = int(os.getenv("LOOP_PAUSE_IN_SECONDS","30"))
 loop=loopTime >= 0
 if loop and not as_endpoint:
+    count = 0
     while True:
+        count += 1
+        print(f"{count} ------------------")        
         dd = primaryProcessing()
-        print(dd)
+        print(f"{count} ------------------")        
         time.sleep(5)
 elif not as_endpoint and not loop:
     dd = primaryProcessing()
     print(dd)    
-elif (not as_endpoint):
+elif (as_endpoint):
     print("****** RUNNNING AS AN ENDPOINT ******")
     if __name__ == '__main__':
         app.run(debug=True, host='0.0.0.0', port=5555)
