@@ -69,6 +69,8 @@ MAX_SCHEDULED_INTERVAL_IN_MILLIS=600000 - the interval at which the scheduler wi
 AS_ENDPOINT=False - Allows it to act as a REST endpoint
 LOOP_PAUSE_IN_SECONDS=-1 - Positive means it loops pausing this many seconds, negative means it only executes once
 USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH='test/demo/serviceChk_finprodcoredc.txt' - if this is set it reads the local file and not the bucket file
+SKIP_EVENT_GENERATION=True -- if you want to not send out events and just want to gen the dashboard
+
 ```
 
 ### Google Cloud Authentication!

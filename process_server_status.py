@@ -274,6 +274,8 @@ def sendAlertEventWhenServiceIsDown(service_name,status,ppid,limoid,replacementE
     :param ppid: Process ID
     :param limoid: Limo ID
     """
+    if skip_events: return
+
     headers = {
         'Content-Type': 'application/json'
     }
@@ -321,6 +323,9 @@ def sendAlertEventWhenServiceIsUp(service_name,status,ppid,limoid):
     :param ppid: Process ID
     :param limoid: Limo ID
     """
+
+    if skip_events: return
+    
     headers = {
         'Content-Type': 'application/json'
     }
@@ -541,6 +546,7 @@ finacle_host = os.getenv("FINACLE_HOST")
 duration = int(os.getenv('EVENT_DURATION','3600000'))  # Event duration in milliseconds (default: 1 hour)
 max_scheduled_execution_interval=int(os.getenv("MAX_SCHEDULED_INTERVAL_IN_MILLIS",duration))
 local_file_override_path=os.getenv("USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH",None)
+skip_events=os.getenv("SKIP_EVENT_GENERATION",'False').lower().startswith('t')
 
 # =============================================================================
 # MAIN EXECUTION FUNCTION
