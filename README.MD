@@ -57,7 +57,8 @@ BASE_URL=https://your-instance.instana.io
 API_TOKEN=your-instana-api-token
 DASHBOARD_NAME=Finacle Monitor
 WIDGET_NAME=finprodcoredc2 Service Status
-AGENT_URL=http://your-agent-url:4001
+AGENT_URL=http://your-agent-url:4001  -- basic instana agent port
+OTLP_AGENT_URL=http://172.16.0.70:4000 -- the OLTP port on the instana agent
 EVENT_DURATION=3600000 - the amount of time that a event will stay OPEN for
 FINACLE_HOST=finprodcoredc2
 
