@@ -51,7 +51,7 @@
           "by": "label",
           "direction": "ASC"
         },
-        "tableSize": 50,
+        "tableSize": 100,
         "countGroup": true,
         "source": "INFRASTRUCTURE_METRICS",
         "datasets": {
