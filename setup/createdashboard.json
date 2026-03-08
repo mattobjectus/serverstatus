@@ -150,31 +150,31 @@
         },
         "grouping": []
       },
-      "height": 18
+      "height": 46
     },
     {
       "width": 6,
-      "x": 0,
-      "y": 36,
-      "id": "qqs1s6SJL09v1qz-",
-      "title": "finprodcoredc2 Service Status",
-      "type": "markdown",
-      "config": "|&nbsp;Service Name&nbsp;|&nbsp;Status&nbsp;|&nbsp;PPID&nbsp;|&nbsp;Limo Port&nbsp;|\n| --- |--- |--- |--- |\n|&nbsp; | | | |\n|&nbsp;**swiftsrv_JM**&nbsp;|&nbsp;**DOWN**&nbsp;|&nbsp;**10546**&nbsp;|&nbsp;**10771**&nbsp;|\n|&nbsp; | | | |\n|&nbsp;cbc&nbsp;|&nbsp;UP&nbsp;|&nbsp;44696062&nbsp;|&nbsp;10141&nbsp;|\n|&nbsp;aabsrv_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;16908924&nbsp;|&nbsp;10900&nbsp;|\n|&nbsp;binagent_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;57344356&nbsp;|&nbsp;10551&nbsp;|\n|&nbsp;chqdpvn_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;20521&nbsp;|\n|&nbsp;coresession&nbsp;|&nbsp;UP&nbsp;|&nbsp;1376786&nbsp;|&nbsp;10191&nbsp;|\n|&nbsp;cust_AchReturns&nbsp;|&nbsp;UP&nbsp;|&nbsp;14615066&nbsp;|&nbsp;34384&nbsp;|\n|&nbsp;cust_AchTransactionProcessing&nbsp;|&nbsp;UP&nbsp;|&nbsp;56623438&nbsp;|&nbsp;35111&nbsp;|\n|&nbsp;cust_DeliquentLoansDataProcessing&nbsp;|&nbsp;UP&nbsp;|&nbsp;39685&nbsp;|&nbsp;35112&nbsp;|\n|&nbsp;cust_LoanProcessing&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;35121&nbsp;|\n|&nbsp;cust_OutwardWireTransfers&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;38374&nbsp;|\n|&nbsp;cust_StandingOrderAutomation&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;39025&nbsp;|\n|&nbsp;cust_alerts_monitor_system_accts&nbsp;|&nbsp;UP&nbsp;|&nbsp;12124530&nbsp;|&nbsp;46446&nbsp;|\n|&nbsp;cust_batchTransaction&nbsp;|&nbsp;UP&nbsp;|&nbsp;53346718&nbsp;|&nbsp;57574&nbsp;|\n|&nbsp;cust_billpay_trxn&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;50100&nbsp;|\n|&nbsp;cust_billpay_reports&nbsp;|&nbsp;UP&nbsp;|&nbsp;50856556&nbsp;|&nbsp;60200&nbsp;|\n|&nbsp;billpay_Settle&nbsp;|&nbsp;UP&nbsp;|&nbsp;8127034&nbsp;|&nbsp;17171&nbsp;|\n|&nbsp;cust_bpay_charges_collection&nbsp;|&nbsp;UP&nbsp;|&nbsp;52101734&nbsp;|&nbsp;62779&nbsp;|\n|&nbsp;cust_bpay_notification&nbsp;|&nbsp;UP&nbsp;|&nbsp;34865826&nbsp;|&nbsp;72779&nbsp;|\n|&nbsp;cust_corporateAch&nbsp;|&nbsp;UP&nbsp;|&nbsp;43909880&nbsp;|&nbsp;20999&nbsp;|\n|&nbsp;cust_retailACHBatch&nbsp;|&nbsp;UP&nbsp;|&nbsp;65929704&nbsp;|&nbsp;37371&nbsp;|\n|&nbsp;cust_retailAch&nbsp;|&nbsp;UP&nbsp;|&nbsp;197372&nbsp;|&nbsp;47474&nbsp;|\n|&nbsp;cust_rtgsInward&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;27272&nbsp;|\n|&nbsp;cust_rtgsManagament&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;28285&nbsp;|\n|&nbsp;cust_rtgsOutward&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;28282&nbsp;|\n|&nbsp;dispatcher1_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;50200916&nbsp;|&nbsp;10561&nbsp;|\n|&nbsp;eabgst_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;32637578&nbsp;|&nbsp;10541&nbsp;|\n|&nbsp;finlistval&nbsp;|&nbsp;UP&nbsp;|&nbsp;59966092&nbsp;|&nbsp;10196&nbsp;|\n|&nbsp;finlistval_fi&nbsp;|&nbsp;UP&nbsp;|&nbsp;13763214&nbsp;|&nbsp;20196&nbsp;|\n|&nbsp;genlimo_AB&nbsp;|&nbsp;UP&nbsp;|&nbsp;53084622&nbsp;|&nbsp;10421&nbsp;|\n|&nbsp;genlimo_DC&nbsp;|&nbsp;UP&nbsp;|&nbsp;44040688&nbsp;|&nbsp;10321&nbsp;|\n|&nbsp;genlimo_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;36962796&nbsp;|&nbsp;10521&nbsp;|\n|&nbsp;mqmswiftin_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10526&nbsp;|\n|&nbsp;mqmswiftout_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10531&nbsp;|\n|&nbsp;uniser_AB&nbsp;|&nbsp;UP&nbsp;|&nbsp;48300602&nbsp;|&nbsp;10391&nbsp;|\n|&nbsp;uniser_DC&nbsp;|&nbsp;UP&nbsp;|&nbsp;26804924&nbsp;|&nbsp;10291&nbsp;|\n|&nbsp;uniser_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;42795522&nbsp;|&nbsp;10491&nbsp;|\n|&nbsp;finrptsrvr&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10181&nbsp;|\n|&nbsp;finrptsrvr&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10184&nbsp;|\n\n\n##### Updated: 08-03-2026 13:12:17",
-      "height": 14
-    },
-    {
-      "width": 6,
-      "x": 0,
-      "y": 18,
+      "x": 6,
+      "y": 0,
       "id": "A3agAXcn7FjnnYta",
       "title": "Service Issues",
       "type": "table",
       "config": {
-        "dynamicFocusQuery": "event.text:Finacle Service Is Down. Please contact Finacle Dev Ops",
+        "dynamicFocusQuery": "event.text:Finacle event.state:OPEN\tevent.severity:critical event.type:critical\t",
         "columns": ["icon", "title", "entityLabel"],
         "source": "EventsTable"
       },
       "height": 18
+    },
+    {
+      "width": 6,
+      "x": 6,
+      "y": 18,
+      "id": "qqs1s6SJL09v1qz-",
+      "title": "finprodcoredc2 Service Status",
+      "type": "markdown",
+      "config": "|&nbsp;Service Name&nbsp;|&nbsp;Status&nbsp;|&nbsp;PPID&nbsp;|&nbsp;Limo Port&nbsp;|\n| --- |--- |--- |--- |\n|&nbsp; | | | |\n|&nbsp;**chqdpvn_JM**&nbsp;|&nbsp;**DOWN**&nbsp;|&nbsp;****&nbsp;|&nbsp;**20521UP**&nbsp;|\n|&nbsp; | | | |\n|&nbsp;cbc&nbsp;|&nbsp;UP&nbsp;|&nbsp;44696062&nbsp;|&nbsp;10141&nbsp;|\n|&nbsp;aabsrv_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;16908924&nbsp;|&nbsp;10900&nbsp;|\n|&nbsp;binagent_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;57344356&nbsp;|&nbsp;10551&nbsp;|\n|&nbsp;coresession&nbsp;|&nbsp;UP&nbsp;|&nbsp;1376786&nbsp;|&nbsp;10191&nbsp;|\n|&nbsp;cust_AchReturns&nbsp;|&nbsp;UP&nbsp;|&nbsp;14615066&nbsp;|&nbsp;34384DOWN&nbsp;|\n|&nbsp;cust_AchTransactionProcessing&nbsp;|&nbsp;UP&nbsp;|&nbsp;56623438&nbsp;|&nbsp;35111&nbsp;|\n|&nbsp;cust_DeliquentLoansDataProcessing&nbsp;|&nbsp;UP&nbsp;|&nbsp;39685&nbsp;|&nbsp;35112&nbsp;|\n|&nbsp;cust_LoanProcessing&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;35121&nbsp;|\n|&nbsp;cust_OutwardWireTransfers&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;38374&nbsp;|\n|&nbsp;cust_StandingOrderAutomation&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;39025&nbsp;|\n|&nbsp;cust_alerts_monitor_system_accts&nbsp;|&nbsp;UP&nbsp;|&nbsp;12124530&nbsp;|&nbsp;46446&nbsp;|\n|&nbsp;cust_batchTransaction&nbsp;|&nbsp;UP&nbsp;|&nbsp;53346718&nbsp;|&nbsp;57574&nbsp;|\n|&nbsp;cust_billpay_trxn&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;50100&nbsp;|\n|&nbsp;cust_billpay_reports&nbsp;|&nbsp;UP&nbsp;|&nbsp;50856556&nbsp;|&nbsp;60200&nbsp;|\n|&nbsp;billpay_Settle&nbsp;|&nbsp;UP&nbsp;|&nbsp;8127034&nbsp;|&nbsp;17171&nbsp;|\n|&nbsp;cust_bpay_charges_collection&nbsp;|&nbsp;UP&nbsp;|&nbsp;52101734&nbsp;|&nbsp;62779&nbsp;|\n|&nbsp;cust_bpay_notification&nbsp;|&nbsp;UP&nbsp;|&nbsp;34865826&nbsp;|&nbsp;72779&nbsp;|\n|&nbsp;cust_corporateAch&nbsp;|&nbsp;UP&nbsp;|&nbsp;43909880&nbsp;|&nbsp;20999&nbsp;|\n|&nbsp;cust_retailACHBatch&nbsp;|&nbsp;UP&nbsp;|&nbsp;65929704&nbsp;|&nbsp;37371&nbsp;|\n|&nbsp;cust_retailAch&nbsp;|&nbsp;UP&nbsp;|&nbsp;197372&nbsp;|&nbsp;47474&nbsp;|\n|&nbsp;cust_rtgsInward&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;27272&nbsp;|\n|&nbsp;cust_rtgsManagament&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;28285&nbsp;|\n|&nbsp;cust_rtgsOutward&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;28282&nbsp;|\n|&nbsp;dispatcher1_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;50200916&nbsp;|&nbsp;10561&nbsp;|\n|&nbsp;eabgst_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;32637578&nbsp;|&nbsp;10541&nbsp;|\n|&nbsp;finlistval&nbsp;|&nbsp;UP&nbsp;|&nbsp;59966092&nbsp;|&nbsp;10196&nbsp;|\n|&nbsp;finlistval_fi&nbsp;|&nbsp;UP&nbsp;|&nbsp;13763214&nbsp;|&nbsp;20196&nbsp;|\n|&nbsp;genlimo_AB&nbsp;|&nbsp;UP&nbsp;|&nbsp;53084622&nbsp;|&nbsp;10421&nbsp;|\n|&nbsp;genlimo_DC&nbsp;|&nbsp;UP&nbsp;|&nbsp;44040688&nbsp;|&nbsp;10321&nbsp;|\n|&nbsp;genlimo_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;36962796&nbsp;|&nbsp;10521&nbsp;|\n|&nbsp;mqmswiftin_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10526&nbsp;|\n|&nbsp;mqmswiftout_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10531&nbsp;|\n|&nbsp;swiftsrv_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;10546&nbsp;|&nbsp;10771&nbsp;|\n|&nbsp;uniser_AB&nbsp;|&nbsp;UP&nbsp;|&nbsp;48300602&nbsp;|&nbsp;10391&nbsp;|\n|&nbsp;uniser_DC&nbsp;|&nbsp;UP&nbsp;|&nbsp;26804924&nbsp;|&nbsp;10291&nbsp;|\n|&nbsp;uniser_JM&nbsp;|&nbsp;UP&nbsp;|&nbsp;42795522&nbsp;|&nbsp;10491&nbsp;|\n|&nbsp;finrptsrvr&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10181&nbsp;|\n|&nbsp;finrptsrvr&nbsp;|&nbsp;UP&nbsp;|&nbsp;&nbsp;|&nbsp;10184&nbsp;|\n\n\n##### Updated: 08-03-2026 17:25:56",
+      "height": 14
     }
   ],
   "ownerId": "69a0d7f3876159000119620d",
