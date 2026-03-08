@@ -7,7 +7,8 @@ A Python-based monitoring system that tracks server/service status, uploads data
 This project consists of two main components:
 
 1. **storebucket.py** - Continuously uploads service status files to Google Cloud Storage. This is for testing
-2. **processServerStatus.py** - Reads status data from GCS, updates Instana dashboards, and manages service alerts/events
+2. **process_server_status_events.py** - Reads status data from GCS, updates Instana dashboards, and manages service alerts/events
+3. **process_server_status_entities.py** - Reads status data from GCS, updates Instana dashboards, sends metrics which then cause aleerts to trigger
 
 ## Features
 
@@ -81,6 +82,24 @@ Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to point to your s
 export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/service-account-key.json"
 ```
 
+## Setup
+
+Before you can run the process_server_status_entities.ps you need to set up information
+in the instana server.
+Please call the following urls with the following bodies:
+
+1. entity type - create the finacle server entity type
+   POST https://<instana tenant>.instana.io/api/custom-entitytypes
+   JSON BODY: setup/createentitytype.json
+2. event specification - this adds the spec that will create an event when a server is down
+   POST https://<instana tenant>.instana.io/api/events/settings/event-specifications/custom
+   JSON BODY: setup/createeventspec.json
+3. dashboard
+   POST https://npm-jncb.instana.io/api/custom-dashboard/
+   JSON BODY: setup/createdashboard.json
+
+You must pass Auhtorization: apiToken <instanaApiToken> in the headers
+
 ## Usage
 
 ### Upload Service Status to GCS
@@ -98,7 +117,12 @@ This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bu
 Run the dashboard updater to process status data and update Instana:
 
 ```bash
-python process_server_status.py
+python process_server_status_events.ph
+
+or
+
+python process_server_status_entities.ph
+
 ```
 
 This script will:
@@ -119,7 +143,7 @@ When running as a Flask application, the following endpoints are available:
 Start the Flask server:
 
 ```bash
-python process_server_status.py
+python process_server_status_events.ph
 ```
 
 The server will run on `http://0.0.0.0:5555`
@@ -127,7 +151,7 @@ The server will run on `http://0.0.0.0:5555`
 ## File Structure
 
 - `upload_demo_server_status_file.py` - GCS upload script
-- `process_server_status.py` - Main dashboard update and event management script
+- `process_server_status_events.ph` - Main dashboard update and event management script
 - `test/demo/serviceChk_finprodcoredc2.txt` - Service status input file
 - `.env` - Environment configuration (not tracked in git)
 

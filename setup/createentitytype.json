@@ -1,0 +1,72 @@
+{
+  "identifiers": ["service.instance.id", "service.name", "entity.kind"],
+  "dependencies": [],
+  "dashboards": [],
+  "label": "Finacle Service Entity",
+  "tagFilterExpression": {
+    "type": "EXPRESSION",
+    "logicalOperator": "AND",
+    "elements": [
+      {
+        "type": "TAG_FILTER",
+        "name": "entity.kind",
+        "value": "finacle.service.entity.1",
+        "operator": "EQUALS",
+        "entity": "NOT_APPLICABLE"
+      },
+      {
+        "type": "TAG_FILTER",
+        "name": "service.name",
+        "operator": "NOT_BLANK",
+        "value": null,
+        "entity": "NOT_APPLICABLE"
+      },
+      {
+        "type": "TAG_FILTER",
+        "name": "service.instance.id",
+        "operator": "NOT_BLANK",
+        "value": null,
+        "entity": "NOT_APPLICABLE"
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "id": "service_status",
+      "source": "service_status",
+      "name": "service_status",
+      "label": "Service Status",
+      "description": "1 = Up / Healthy, 0 = Down / Unhealthy",
+      "unit": "1",
+      "type": "GAUGE",
+      "aggregation": "MEAN",
+      "formatter": "NUMBER",
+      "granularity": "600000"
+    },
+    {
+      "id": "service_process_id",
+      "source": "service_process_id",
+      "name": "service_process_id",
+      "label": "Service Process Id",
+      "description": "The process id that the finacle service is running on",
+      "unit": "1",
+      "type": "GAUGE",
+      "aggregation": "MEAN",
+      "formatter": "NUMBER",
+      "granularity": "600000"
+    },
+    {
+      "id": "service_limo_port",
+      "source": "service_limo_port",
+      "name": "service_limo_port",
+      "label": "Service Limo Port",
+      "description": "The port that the finacle service is listening on",
+      "unit": "1",
+      "type": "GAUGE",
+      "aggregation": "MEAN",
+      "formatter": "NUMBER",
+      "granularity": "600000"
+    }
+  ],
+  "tags": []
+}

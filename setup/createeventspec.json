@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Finacle Service Down",
+    "entityType": "openTelemetry",
+    "query": null,
+    "triggering": false,
+    "description": "Finacle Service Is Down.  Please contact Finacle Dev Ops",
+    "expirationTime": 10000,
+    "enabled": true,
+    "rules": [
+      {
+        "ruleType": "threshold",
+        "metricName": "metrics.gauges.fincale.service.metrics/service_status{}",
+        "metricPattern": null,
+        "rollup": 0,
+        "window": 1000,
+        "aggregation": "max",
+        "conditionOperator": "<=",
+        "conditionValue": 0.0,
+        "severity": 10
+      }
+    ],
+    "ruleLogicalOperator": "AND",
+    "lastUpdated": 1772925059600,
+    "validVersion": 1,
+    "actions": null,
+    "migrated": false,
+    "applicationAlertConfigId": null,
+    "infraAlertConfigId": null,
+    "deleted": false,
+    "transientEventEnabled": false,
+    "transientEventThreshold": 300000,
+    "transientEventAlertMuted": false
+  }
+]

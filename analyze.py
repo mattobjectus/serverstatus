@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+
 def find_instana_dashboard_id(dashboard_name, base_url, api_token):
     """
     Downloads all custom dashboards from Instana and looks for the one matching the name
@@ -116,7 +117,7 @@ def close_events(eventsToClose):
         else:
             print(response.status_code)
 
-def find_open_events():
+def find_open_events(currentEventTime):
     """
     Retrieves all open events from Instana and categorizes them by service name
     Separates events into offline events (services down) and online events (services up)
@@ -141,29 +142,30 @@ def find_open_events():
     openOfflineEventIds = {}
     
     # Categorize open events by service name and status (offline vs online)
-    for issue in issues: 
-        if (issue["state"] == "open"):
-                serviceName = None
-                # Check if this is an offline event
-                if (issue["problem"].endswith(offlineSuffix)):
-                    serviceName = issue["problem"].removesuffix(offlineSuffix).strip()
-                    eventList = openOfflineEventIds.get(serviceName,[])
-                    eventList.append(issue["eventId"])
-                    openOfflineEventIds[serviceName] = eventList
-                    eventList = openOfflineEvents.get(serviceName,[])
-                    eventList.append(issue)
-                    openOfflineEvents[serviceName] = eventList
-
-                # Check if this is an online event
-                if (issue["problem"].endswith(onlineSuffix)):
-                    serviceName = issue["problem"].removesuffix(onlineSuffix).strip()                
-                    eventList = openOnlineEventIds.get(serviceName,[])
-                    eventList.append(issue["eventId"])
-                    openOnlineEventIds[serviceName] = eventList
-
-                    
-        
-    return { "offline": openOfflineEventIds, "online": openOnlineEventIds, "offlineEvents": openOfflineEvents}
+    foundOpenIssue = False
+    totalEventTime = 0
+    if (currentEventTime > 0):
+        totalEventTime = ((time.time_ns() //1_000_000) - (currentEventTime))/1000
+    for event in issues: 
+        if (event["state"] == "open"):  
+            dur = event["end"]/1000 - event["start"]/1000 
+            startTime = datetime.fromtimestamp(event["start"]/1000).strftime("%Y-%m-%d %H:%M:%S")
+            endTime = datetime.fromtimestamp(event["end"]/1000).strftime("%Y-%m-%d %H:%M:%S")
+            entityLabel = event["entityLabel"]
+            if currentEventTime == -1:
+                currentEventTime = time.time_ns() // 1_000_000
+            foundOpenIssue = True
+            print(f"[{event["eventId"]}]-[{totalEventTime}] {entityLabel}: {startTime} ==== {endTime}:  {dur}")
+            cet = currentEventTime
+    if (currentEventTime > -1):
+        if not foundOpenIssue:
+            totalEventTime = ((time.time_ns() //1_000_000) - (currentEventTime))/1000
+            print(f"Total Event Time: {totalEventTime} secs")
+            print('===================================================')
+            currentEventTime = -1
+    elif foundOpenIssue:
+        print(f"{count} ------------------")        
+    return currentEventTime
 
 def filter_events_about_to_expire(openEvents):
     """
@@ -353,154 +355,19 @@ def splitThis(line):
         chunks[2] = ''
     return chunks
 
-def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
-    """
-    Main processing function that:
-    1. Reads CSV file from Google Cloud Storage bucket
-    2. Parses the CSV or text file and builds a markdown table
-    3. Retrieves open events from Instana
-    4. Sends new events for services that are down
-    5. Closes events for services that are back up
+def analyzeEvents(bucket_name,file_path,currentEventTime):
+    currentEventTime = find_open_events(currentEventTime)
+    return currentEventTime
     
-    :param bucket_name: Name of the GCS bucket
-    :param file_path: Path to the CSV file in the bucket
-    :return: Markdown table string or None
-    """
-
-    if local_file_override_path:
-        file = open(local_file_override_path)
-        content = file.read()
-        csv_file = local_file_override_path.endswith('.csv')
-    else:
-        # Initialize the Google Cloud Storage client (assumes authentication is set up)
-        client = storage.Client(project=project)
-
-        # Get the bucket
-        bucket = client.get_bucket(bucket_name)
-
-        # Get the blob (file)
-        blob = bucket.blob(file_path)
-        csv_file = file_path.endswith('.csv')
-
-        # Read the content as text (recommended over download_as_string, which is deprecated)
-        content = blob.download_as_text(encoding='utf-8')
-
-    # Parse the content line by line and build a markdown table
-    lines = content.strip().split('\n')
-
-    if lines:
-        # Build markdown table string
-        markdown_table = ""
-        
-        # Process header row
-        # Using &nbsp; for better formatting in Instana dashboard
-        header = ["Service Name","Status","PPID","Limo Port"]
-        markdown_table += "|&nbsp;" + "&nbsp;|&nbsp;".join(header) + "&nbsp;|\n"
-        markdown_table += "| " + " |".join(['---'] * len(header)) + " |\n"
-        markdown_table += "|&nbsp; | | | |\n"
-
-        # Get currently open events from Instana to manage event lifecycle
-        openIssues = find_open_events()
-        offlineEventIds = openIssues["offline"]
-        offlineEvents = openIssues["offlineEvents"]
-        eventsToReplace = filter_events_about_to_expire(offlineEvents)
-
-        eventsToClose = []
-
-        findBreak = '---------------------------------------------------------------------------------|'
-        findBreakCount = 3
-        lineIndex = 1
-        if (not csv_file):
-            for line in lines:
-                lineIndex = lineIndex + 1
-                if (line.strip().endswith(findBreak)):
-                    findBreakCount = findBreakCount - 1
-                    if (findBreakCount <= 0):
-                        break
-        else:
-            lineIndex = 1
-
-            
-
-        # First pass: Add all offline/down services to the table (in bold)
-        addedDowns = False
-        for line in lines[lineIndex:]:
-            if (not csv_file and line.endswith(findBreak)):
-                break
-            if line.strip():  # Skip empty lines
-                if (csv_file):
-                    columns = line.split(',')
-                else:
-                    columns = splitThis(line)
-                if (columns[1].capitalize() == 'Down' or columns[1] == 'Offline'):
-                    addedDowns = True
-                    markdown_table += "|&nbsp;**" + "**&nbsp;|&nbsp;**".join(columns) + "**&nbsp;|\n"
-
-        if (addedDowns):
-            markdown_table += "|&nbsp; | | | |\n"
-
-        # Second pass: Process each service for event management and add online services to table
-        for line in lines[lineIndex:]:
-            if (not csv_file and line.endswith(findBreak)):
-                break
-            if line.strip():  # Skip empty lines
-                if (csv_file):
-                    columns = line.split(',')
-                else:
-                    columns = splitThis(line)
-                serviceName = columns[0]
-                
-                if (columns[1].capitalize() == 'Down' or columns[1] == 'Offline'):
-                    serviceHasOpenDownEvent = len(offlineEventIds.get(finacle_host+"."+serviceName,[])) > 0
-                    if (serviceHasOpenDownEvent):
-                        eventsToReplaceForService = eventsToReplace.get(finacle_host+"."+serviceName,[])      
-                        eventToReplace = None
-                        if (eventsToReplaceForService and len(eventsToReplaceForService)):                            
-                            eventIdsToClose = []
-                            for event in eventsToReplaceForService:
-                                eventIdsToClose.append(event["eventId"])
-                            close_events(eventIdsToClose)             
-                            eventToReplace = eventsToReplaceForService[0]   
-                            sendAlertEventWhenServiceIsDown(finacle_host+"."+columns[0],columns[1],columns[2],columns[3],eventToReplace)                        
-                    else:
-                        sendAlertEventWhenServiceIsDown(finacle_host+"."+columns[0],columns[1],columns[2],columns[3],None)
-                else:
-                    # Service is up close the offline event if it has one
-                    event_ids_to_close = offlineEventIds.get(finacle_host+"."+serviceName,[])
-                    close_events(event_ids_to_close)
-                    # Service is up: add to table and send up event, close offline events
-                    markdown_table += "|&nbsp;" + "&nbsp;|&nbsp;".join(columns) + "&nbsp;|\n"
-        
-        now = datetime.now()
-        formatted_time = now.strftime("%d-%m-%Y %H:%M:%S")
-        markdown_table += "\n\n##### Updated: "+formatted_time
-        return markdown_table
-    return None
 
 # =============================================================================
 # Primary Processing
 # =============================================================================
 
-def primaryProcessing():
+def primaryProcessing(currentEventTime):
         # Step 1: Process the CSV from bucket, create markdown table, and send events
-    newConfig = processBucketCreateMarkupAndSendEvents(bucket_name,bucket_file_path)
-
-    # Step 2: Find the dashboard by name
-    dashboard_id = find_instana_dashboard_id(dashboard_name,base_url,api_token)
-
-    dashboard_data = f'Dashboard {dashboard_name} not found.'
-    if (dashboard_id):
-        # Step 3: Fetch the current dashboard configuration
-        dashboard_data = fetch_instana_dashboard(dashboard_id,base_url, api_token)
-
-        if (dashboard_data):
-            # Step 4: Replace the widget config with the new markdown table
-            dashboard_data = replaceConfigInWidget(dashboard_data,widget_name,newConfig)
-            
-            # Step 5: Update the dashboard on Instana
-            updateDashboardOnInstana(dashboard_data)
-    return dashboard_data
-
+    currentEventTime = analyzeEvents(bucket_name,bucket_file_path,currentEventTime)
+    return currentEventTime
     
 # Create a Flask application instance
 app = Flask(__name__)
@@ -515,7 +382,7 @@ def hello_world():
 
 @app.route('/api/v1/service/status', methods=['GET'])
 def executeServiceStatus():
-    dd = primaryProcessing()
+    dd = primaryProcessing(-1)
     return dd
 
 
@@ -548,20 +415,20 @@ max_scheduled_execution_interval=int(os.getenv("MAX_SCHEDULED_INTERVAL_IN_MILLIS
 local_file_override_path=os.getenv("USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH",None)
 skip_events=os.getenv("SKIP_EVENT_GENERATION",'False').lower().startswith('t')
 
+
 # =============================================================================
 # MAIN EXECUTION FUNCTION
 # =============================================================================
 
 as_endpoint=os.getenv("AS_ENDPOINT",'False').lower().startswith('t')
 loopTime = int(os.getenv("LOOP_PAUSE_IN_SECONDS","30"))
-loop=loopTime >= 0
+loop=True
 if loop and not as_endpoint:
     count = 0
+    currentEventTime = -1
     while True:
         count += 1
-        print(f"{count} ------------------")        
-        dd = primaryProcessing()
-        print(f"{count} ------------------")        
+        currentEventTime = primaryProcessing(currentEventTime)
         time.sleep(5)
 elif not as_endpoint and not loop:
     dd = primaryProcessing()
