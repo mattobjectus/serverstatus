@@ -274,3 +274,29 @@ instanadashboard
 2.  Create a Markdown widget with the name found in the WIDGET_NAME config value.
 3.  Create a Table widget with the config shown below. The event.entity.label is the name of the Agent entity sending the alerts
     ![Instana Alert Table Widget](./docs/images/alerttablewidgetinfo.png)
+
+## Sample .env (Tokens are invalid)
+
+BUCKET_NAME=antarsia_test
+BUCKET_FILE_PATH=serviceChk_finprodcoredc2.txt
+PROJECT_NAME=msm-secondary
+GOOGLE_APPLICATION_CREDENTIALS="/Users/musser/msm/dev/serverstatus/certs/msm-secondary-55cf023b4939.json"
+USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH='test/demo/serviceChk_finprodcoredc.txt'
+BASE_URL=https://mintgreen-yoda00e9bs.instana.io
+API_TOKEN=qVq2XmneTEm2sJPyApP8cx
+DASHBOARD_NAME=Finacle Observ
+WIDGET_NAME=finprodcoredc2 Service Status
+xEVENT_DURATION=3600000
+EVENT_DURATION=180000
+MAX_SCHEDULED_INTERVAL_IN_MILLIS=60000
+FINACLE_HOST=finprodcoredc2
+LOOP_PAUSE_IN_SECONDS=10
+AS_ENDPOINT=False
+
+AGENT_URL=http://172.16.0.70:4001
+OTLP_AGENT_URL=http://172.16.0.70:4000
+#SKIP_EVENT_GENERATION=True
+
+```
+
+```
