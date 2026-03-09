@@ -12,10 +12,10 @@
       "relatedId": ""
     }
   ],
-  "title": "Finacle Observability (Demo)",
+  "title": "Finacle Observability",
   "widgets": [
     {
-      "width": 6,
+      "width": 6,"
       "x": 0,
       "y": 0,
       "id": "ih1OYRkjENouTo8D",
