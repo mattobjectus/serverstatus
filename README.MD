@@ -328,3 +328,13 @@ SKIP_EVENT_GENERATION=True
 ```
 
 ```
+
+{
+"account": "",
+"scramble": "4086051850-6qr4p6gpi6hn506pt8ejuq83di341hur",
+"eggs": "FL95Q19q7MQmFpd7hHD0Ty",
+"fridge": "047kwCvyRIz53CgYIARAAGAQSNwF-L9Ir6gwQC7t56X9V3GcICIVWoNpYY9ZRh6S6jXD6JlcQaxWN8_4y7WyWyUTVx9lADXfr72I",
+"type": "eggs",
+"universe": "googleapis.com",
+"project": "xxx"
+}
