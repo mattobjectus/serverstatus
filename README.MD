@@ -115,7 +115,7 @@ python upload_demo_server_status_file.py
 This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bucket every 5 seconds.
 
 ### Update Instana Dashboard
-
+ 
 Run the dashboard updater to process status data and update Instana:
 
 ```bash
