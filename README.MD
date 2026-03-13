@@ -108,7 +108,7 @@ You must pass Auhtorization: apiToken <instanaApiToken> in the headers
 
 Run the storage uploader to continuously upload status files:
 
-```bash
+```bash 
 python upload_demo_server_status_file.py
 ````
 
@@ -305,25 +305,29 @@ instanadashboard
 
 ## Sample .env (Tokens are invalid)
 
-BUCKET_NAME=antarsia_test
+BUCKET_NAME=finacle_data
 BUCKET_FILE_PATH=serviceChk_finprodcoredc2.txt
 PROJECT_NAME=msm-secondary
-GOOGLE_APPLICATION_CREDENTIALS="/Users/musser/msm/dev/serverstatus/certs/msm-secondary-55cf023b4939.json"
-USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH='test/demo/serviceChk_finprodcoredc.txt'
-BASE_URL=https://mintgreen-yoda00e9bs.instana.io
-API_TOKEN=qVq2XmneTEm2sJPyApP8cx
+GOOGLE_APPLICATION_CREDENTIALS="creds/jncbcredentials.json"
+#USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH='test/demo/serviceChk_finprodcoredc.txt'
+BASE_URL=https://npm-jncb.instana.io
+API_TOKEN=<API_TOKEN>
 DASHBOARD_NAME=Finacle Observ
 WIDGET_NAME=finprodcoredc2 Service Status
 xEVENT_DURATION=3600000
 EVENT_DURATION=180000
 MAX_SCHEDULED_INTERVAL_IN_MILLIS=60000
 FINACLE_HOST=finprodcoredc2
-LOOP_PAUSE_IN_SECONDS=10
-AS_ENDPOINT=False
+LOOP_PAUSE_IN_SECONDS=-1
+AS_ENDPOINT=True
 
-AGENT_URL=http://172.16.0.70:4001
-OTLP_AGENT_URL=http://172.16.0.70:4000
-#SKIP_EVENT_GENERATION=True
+AGENT_URL=http://10.17.219.3:42699
+OTLP_AGENT_URL=http://10.17.219.3:4318
+SKIP_EVENT_GENERATION=True
+
+
+
+
 
 ```
 
