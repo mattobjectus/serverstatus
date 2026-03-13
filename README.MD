@@ -108,14 +108,14 @@ You must pass Auhtorization: apiToken <instanaApiToken> in the headers
 
 Run the storage uploader to continuously upload status files:
 
-```bash 
+```bash
 python upload_demo_server_status_file.py
 ````
 
 This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bucket every 5 seconds.
 
 ### Update Instana Dashboard
- 
+
 Run the dashboard updater to process status data and update Instana:
 
 ```bash
@@ -325,20 +325,6 @@ AGENT_URL=http://10.17.219.3:42699
 OTLP_AGENT_URL=http://10.17.219.3:4318
 SKIP_EVENT_GENERATION=True
 
-
-
-
-
 ```
 
 ```
-
-{
-"account": "",
-"scramble": "4086051850-6qr4p6gpi6hn506pt8ejuq83di341hur",
-"eggs": "FL95Q19q7MQmFpd7hHD0Ty",
-"fridge": "047kwCvyRIz53CgYIARAAGAQSNwF-L9Ir6gwQC7t56X9V3GcICIVWoNpYY9ZRh6S6jXD6JlcQaxWN8_4y7WyWyUTVx9lADXfr72I",
-"type": "eggs",
-"universe": "googleapis.com",
-"project": "xxx"
-}
