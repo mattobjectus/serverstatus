@@ -303,9 +303,11 @@ instanadashboard
     ![Instana Alert Table Widget](./docs/images/alerttablewidgetinfo.png)
 3.  Creae an Event Specification from Settings -> Events to raise issues when a server is down
     ![Instana Alert Table Widget](./docs/images/enventspecification.png)
+
+
 ## Sample .env (Tokens are invalid)
 
-BUCKET_NAME=finacle_data
+BUCKET_NAME=finacle_data 
 BUCKET_FILE_PATH=serviceChk_finprodcoredc2.txt
 PROJECT_NAME=msm-secondary
 GOOGLE_APPLICATION_CREDENTIALS="creds/jncbcredentials.json"
