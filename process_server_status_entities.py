@@ -24,6 +24,7 @@ from dotenv import load_dotenv
 if (os.path.exists('etc/env')):
     load_dotenv("etc/env")
 elif (os.path.exists('.env')):
+    print("Loading from .env")
     load_dotenv()
 else:
     raise Exception("No environment or secrets file found")
@@ -393,7 +394,7 @@ def primaryProcessing():
 
         if (dashboard_data):
             # Step 4: Replace the widget config with the new markdown table
-            dashboard_data = replaceConfigInWidget(dashboard_data,widget_name,newConfig)
+            #dashboard_data = replaceConfigInWidget(dashboard_data,widget_name,newConfig)
             
             # Step 5: Update the dashboard on Instana
             updateDashboardOnInstana(dashboard_data)

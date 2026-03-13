@@ -153,7 +153,7 @@ The server will run on `http://0.0.0.0:5555`
 ## File Structure
 
 - `upload_demo_server_status_file.py` - GCS upload script
-- `process_server_status_events.ph` - Main dashboard update and event management script
+- `process_server_status_entities.py` - Main dashboard update and entity and metrics script
 - `test/demo/serviceChk_finprodcoredc2.txt` - Service status input file
 - `.env` - Environment configuration (not tracked in git)
 
@@ -299,10 +299,10 @@ _This project provides the python script referenced in the lower right hand gree
 instanadashboard
 
 1.  Create an Instana dashboard that starts with the DASHBOARD_NAME config value.
-2.  Create a Markdown widget with the name found in the WIDGET_NAME config value.
-3.  Create a Table widget with the config shown below. The event.entity.label is the name of the Agent entity sending the alerts
+2.  Create a Table widget with the config shown below. The event.entity.label is the name of the Agent entity sending the alerts
     ![Instana Alert Table Widget](./docs/images/alerttablewidgetinfo.png)
-
+3.  Creae an Event Specification from Settings -> Events to raise issues when a server is down
+    ![Instana Alert Table Widget](./docs/images/enventspecification.png)
 ## Sample .env (Tokens are invalid)
 
 BUCKET_NAME=finacle_data
