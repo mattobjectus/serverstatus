@@ -1,0 +1,212 @@
+[
+  {
+    "VendorIcon": "1588.gif",
+    "MachineType": "7800 Extension",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "2.gif",
+    "MachineType": "AIX",
+    "Total": "19"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "ASR1002-HX",
+    "Total": "4"
+  },
+  {
+    "VendorIcon": "6889.gif",
+    "MachineType": "Avaya Communication",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "3375.gif",
+    "MachineType": "BIG-IP vCMP Guest",
+    "Total": "8"
+  },
+  {
+    "VendorIcon": "3375.gif",
+    "MachineType": "BIG-IP Virtual Edition",
+    "Total": "2"
+  },
+  {
+    "VendorIcon": "1588.gif",
+    "MachineType": "Brocade Communications Systems, Inc.",
+    "Total": "4"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Catalyst 3560X 48 PoE",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Catalyst 8500L-8S4X",
+    "Total": "3"
+  },
+  {
+    "VendorIcon": "2620.gif",
+    "MachineType": "CheckPoint 13500",
+    "Total": "2"
+  },
+  {
+    "VendorIcon": "2620.gif",
+    "MachineType": "CheckPoint 15400",
+    "Total": "10"
+  },
+  {
+    "VendorIcon": "2620.gif",
+    "MachineType": "CheckPoint 5800",
+    "Total": "4"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco",
+    "Total": "54"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco 4221 Integrated Services Router",
+    "Total": "104"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco 4331 ISR",
+    "Total": "33"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco 5500 Series Wireless Controller",
+    "Total": "2"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco ASR 1001-HX Router",
+    "Total": "4"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco ASR 1001-X Router",
+    "Total": "2"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco ASR 1002",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco C9200L",
+    "Total": "54"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco C9200R Fixed Switch Stack",
+    "Total": "11"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco C9500-40X",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco Catalyst 9300 Series Switch",
+    "Total": "21"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco Catalyst 9800-CL Wireless Controller for Cloud",
+    "Total": "2"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "Cisco Nexus 3548 Switch",
+    "Total": "1 in gen"
+  },
+  {
+    "VendorIcon": "6889.gif",
+    "MachineType": "Communication Manager VE",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "2.gif",
+    "MachineType": "IBM PowerPC",
+    "Total": "31"
+  },
+  {
+    "VendorIcon": "9.gif",
+    "MachineType": "N9K-C9508",
+    "Total": "4"
+  },
+  {
+    "VendorIcon": "8072.gif",
+    "MachineType": "net-snmp - Linux",
+    "Total": "3"
+  },
+  {
+    "VendorIcon": "8072.gif",
+    "MachineType": "Solaris",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "42.gif",
+    "MachineType": "Sun Microsystems SunOS",
+    "Total": "2"
+  },
+  {
+    "VendorIcon": "429.gif",
+    "MachineType": "U.S. Robotics, Inc.",
+    "Total": "3"
+  },
+  {
+    "VendorIcon": "Unknown.gif",
+    "MachineType": "Unknown",
+    "Total": "19"
+  },
+  {
+    "VendorIcon": "6876.gif",
+    "MachineType": "VMware ESX Server",
+    "Total": "27"
+  },
+  {
+    "VendorIcon": "6876.gif",
+    "MachineType": "VMware vCenter Server",
+    "Total": "3"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 10 Workstation",
+    "Total": "1"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 2008 R2 Server",
+    "Total": "6"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 2008 Server",
+    "Total": "3"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 2012 R2 Server",
+    "Total": "85"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 2012 Server",
+    "Total": "16"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 2016 Server",
+    "Total": "184"
+  },
+  {
+    "VendorIcon": "311.gif",
+    "MachineType": "Windows 2022 Server",
+    "Total": "4"
+  }
+]

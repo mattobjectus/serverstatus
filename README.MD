@@ -79,9 +79,10 @@ SKIP_EVENT_GENERATION=True -- if you want to not send out events and just want t
 
 Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to point to your service account key file:
 
-```bash
+x```bash
 export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/service-account-key.json"
-```
+
+````
 
 ## Setup
 
@@ -109,7 +110,7 @@ Run the storage uploader to continuously upload status files:
 
 ```bash
 python upload_demo_server_status_file.py
-```
+````
 
 This script will upload `serviceChk_finprodcoredc2.txt` to the configured GCS bucket every 5 seconds.
 
@@ -238,12 +239,39 @@ The system implements intelligent alert management through Instana events, provi
 
 This intelligent alert mechanism ensures that operations teams are immediately notified of service outages while avoiding alert fatigue from duplicate notifications.
 
+## Cloud Run Deployment
+
+This application can be deployed to Google Cloud Run for serverless execution. See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
+
+**Quick Deploy:**
+
+```bash
+./deploy.sh
+```
+
+**Key Files:**
+
+- `Dockerfile` - Container configuration
+- `requirements.txt` - Python dependencies
+- `.env.cloudrun.example` - Environment variable template
+- `cloudbuild.yaml` - Cloud Build configuration
+- `deploy.sh` - Automated deployment script
+- `DEPLOYMENT.md` - Complete deployment guide
+- `GCP_CREDENTIALS_SETUP.md` - GCP authentication setup guide
+
+**GCP Credentials:**
+
+For detailed information on setting up Google Cloud credentials for different environments (Cloud Run, local Docker, local development), see [GCP_CREDENTIALS_SETUP.md](GCP_CREDENTIALS_SETUP.md).
+
+- **Cloud Run (Production)**: Uses automatic Workload Identity - no manual setup needed
+- **Local Docker Testing**: Mount service account key file
+- **Local Development**: Use `gcloud auth application-default login` or service account key
+
 ## TODO
 
 - [ ] Only delete existing alerts if close to expiration
 - [ ] Adjust start time of new events to match old ones when replacing
 - [ ] Add comprehensive error handling
-- [ ] Run as a scheduled task on Cloud Run
 - [ ] Add structured logging
 - [ ] Improve event state change detection
 

@@ -1,0 +1,45 @@
+# Inventory for All Nodes
+
+,Machine Type,Total
+1588.gif,7800 Extension,1
+2.gif,AIX,19
+9.gif,ASR1002-HX,4
+6889.gif,Avaya Communication,1
+3375.gif,BIG-IP vCMP Guest,8
+3375.gif,BIG-IP Virtual Edition,2
+1588.gif,"Brocade Communications Systems, Inc.",4
+9.gif,Catalyst 3560X 48 PoE,1
+9.gif,Catalyst 8500L-8S4X,3
+2620.gif,CheckPoint 13500,2
+2620.gif,CheckPoint 15400,10
+2620.gif,CheckPoint 5800,4
+9.gif,Cisco,54
+9.gif,Cisco 4221 Integrated Services Router,104
+9.gif,Cisco 4331 ISR,33
+9.gif,Cisco 5500 Series Wireless Controller,2
+9.gif,Cisco ASR 1001-HX Router,4
+9.gif,Cisco ASR 1001-X Router,2
+9.gif,Cisco ASR 1002,1
+9.gif,Cisco C9200L,54
+9.gif,Cisco C9200R Fixed Switch Stack,11
+9.gif,Cisco C9500-40X,1
+9.gif,Cisco Catalyst 9300 Series Switch,21
+9.gif,Cisco Catalyst 9800-CL Wireless Controller for Cloud,2
+9.gif,Cisco Nexus 3548 Switch,1
+6889.gif,Communication Manager VE,1
+2.gif,IBM PowerPC,31
+9.gif,N9K-C9508,4
+8072.gif,net-snmp - Linux,3
+8072.gif,Solaris,1
+42.gif,Sun Microsystems SunOS,2
+429.gif,"U.S. Robotics, Inc.",3
+Unknown.gif,Unknown,19
+6876.gif,VMware ESX Server,27
+6876.gif,VMware vCenter Server,3
+311.gif,Windows 10 Workstation,1
+311.gif,Windows 2008 R2 Server,6
+311.gif,Windows 2008 Server,3
+311.gif,Windows 2012 R2 Server,85
+311.gif,Windows 2012 Server,16
+311.gif,Windows 2016 Server,184
+311.gif,Windows 2022 Server,4

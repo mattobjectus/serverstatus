@@ -19,7 +19,10 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 # Load environment variables from .env file
-load_dotenv()
+if (os.path.exists('etc/.env')):
+    load_dotenv("etc/.env")
+else:
+    load_dotenv()
 
 def find_instana_dashboard_id(dashboard_name, base_url, api_token):
     """

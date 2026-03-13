@@ -21,7 +21,12 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 # Load environment variables from .env file
-load_dotenv()
+if (os.path.exists('etc/env')):
+    load_dotenv("etc/env")
+elif (os.path.exists('.env')):
+    load_dotenv()
+else:
+    raise Exception("No environment or secrets file found")
 
 
 def string_to_int(s):
@@ -284,10 +289,13 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
         # Initialize the Google Cloud Storage client (assumes authentication is set up)
         client = storage.Client(project=project)
 
+        print("Connecting to bucket: "+bucket_name)
         # Get the bucket
         bucket = client.get_bucket(bucket_name)
 
+        print("Connected to bucket: "+bucket_name)
         # Get the blob (file)
+        print("Connecting to file_path: "+file_path)
         blob = bucket.blob(file_path)
         csv_file = file_path.endswith('.csv')
 
@@ -310,9 +318,10 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
 
         findBreak = '---------------------------------------------------------------------------------|'
         findBreakCount = 3
-        lineIndex = 1
+        lineIndex = 0
         if (not csv_file):
             for line in lines:
+                line = line.strip()
                 lineIndex = lineIndex + 1
                 if (line.strip().endswith(findBreak)):
                     findBreakCount = findBreakCount - 1
@@ -324,6 +333,7 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
         # First pass: Add all offline/down services to the table (in bold)
         addedDowns = False
         for line in lines[lineIndex:]:
+            line = line.strip()
             if (not csv_file and line.endswith(findBreak)):
                 break
             if line.strip():  # Skip empty lines
@@ -340,6 +350,7 @@ def processBucketCreateMarkupAndSendEvents(bucket_name,file_path):
 
         # Second pass: Process each service for event management and add online services to table
         for line in lines[lineIndex:]:
+            line = line.strip()
             if (not csv_file and line.endswith(findBreak)):
                 break
             if line.strip():  # Skip empty lines
@@ -430,6 +441,10 @@ local_file_override_path=os.getenv("USE_LOCAL_FILE_INSTEAD_OF_BUCKET_PATH",None)
 skip_events=os.getenv("SKIP_EVENT_GENERATION",'False').lower().startswith('t')
 custom_entity_kind="fincacle.service.entity.1"
 
+
+
+secret_code= os.getenv("SECRET_CODE","NOPE")
+print("Were secrets loaded? "+secret_code)
 # =============================================================================
 # MAIN EXECUTION FUNCTION
 # =============================================================================
@@ -451,4 +466,4 @@ elif not as_endpoint and not loop:
 elif (as_endpoint):
     print("****** RUNNNING AS AN ENDPOINT ******")
     if __name__ == '__main__':
-        app.run(debug=True, host='0.0.0.0', port=5555)
+        app.run(debug=True, host='0.0.0.0', port=int(os.getenv("PORT","8080")))

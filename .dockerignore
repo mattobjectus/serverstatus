@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Test files
+test/
+tests/
+
+# Documentation
+docs/
+*.md
+README.MD
+
+# Certificates (should be provided via secrets)
+certs/
+
+# Other Python scripts not needed for deployment
+upload_demo_server_status_file.py
+process_server_status_events.py
+analyze.py
+convert.py
+createfinacleentitytype.py
